@@ -19,5 +19,6 @@ int itd_verifCode(FILE* itd){
 	 }
 	 else{
 	 	fprintf(stderr, "Impossible d'ouvrir le fichier.\n");
+	 	return 0;
 	 }
 }
