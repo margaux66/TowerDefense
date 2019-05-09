@@ -1,0 +1,12 @@
+@ITD 1
+#premiere ligne de commentaire
+carte map.ppm
+chemin 255 255 255
+construct 152 255 128
+in 255 0 0
+out 0 0 255
+4
+0 1 22 170 1
+1 3 22 70 0 2
+2 3 121 70 1 3
+3 2 121 0 2 

@@ -1,0 +1,26 @@
+class Map{
+public:
+    Map(float x, float y);
+
+    void update();
+    void position();
+    void verifmap();
+
+    /* Getters */
+    float getX() const { 
+    	return m_x; 
+    }
+    float getY() const { 
+    	return m_y;
+    }
+
+    /* Setters */
+    void setX(float x) { m_x = x; }
+    void setY(float y) { m_y = y; }
+
+private:
+	float m_x;
+	float m_y;
+	 
+
+}
