@@ -1,22 +1,23 @@
-#include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
-#include <iostream>
-#include <fstream>
 #include "map.h"
 
-void verifItd(string chemin){
-	ifstream map(chemin);  //Ouverture d'un fichier en lecture
+#define chemin map.itd
 
-	if(map)
-	{
-    	//Tout est prêt pour la lecture.
-	}
-	else
-	{
-	    cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
-	}
-};
+int itd_verifCode(FILE* itd){
+	 itd = fopen(chemin, "r");
+	 if(itd){
+	 	if (strcmp(img, "@ITD") != 0){
+			fprintf(stderr, "Le fichier  n'est pas une carte valide.\n", );
+			fclose(itd);
+			return 0;
+		}
+		else{
+			return 1;
+		}
+	 }
+	 else{
+	 	fprintf(stderr, "Impossible d'ouvrir le fichier.\n");
+	 }
+}
