@@ -9,6 +9,7 @@
 	#include <string>
 	#include <iostream>
 	#include <fstream>
+	#include <math.h>
 
 	#define SIZEWIND = 20
 	#define WINDOW_W = SIZEWIND * 10
