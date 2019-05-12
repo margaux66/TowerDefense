@@ -1,19 +1,7 @@
-#ifndef DEF_MONSTER
-#define DEF_MONSTER
+#ifndef DEF_MONSTER_H
+#define DEF_MONSTER_H
 
-#include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string>
-#include <iostream>
-#include <fstream>
-
-#define SIZEWIND = 20
-#define WINDOW_W = SIZEWIND * 10
-#define WINDOW_H = SIZEWIND * 10
-
+#include "include.h"
 
 enum DirectMonster { UP, RIGHT, DOWN, LEFT};
 

@@ -1,11 +1,3 @@
-#include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string>
-#include <iostream>
-#include <fstream>
 #include "monster.h"
 
 using namespace std;
