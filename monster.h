@@ -28,8 +28,6 @@ public:
 
 	void dead_monster();
 
-	void delete_monster();
-
 	SDL_Rect getFrame();
 	SDL_Rect getPosition();
 	SDL_Surface *getImage();
