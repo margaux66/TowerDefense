@@ -8,6 +8,10 @@ enum DirectMonster { UP, RIGHT, DOWN, LEFT};
 class Monster {
 	//Méthodes
 public:
+	Monster();
+	Monster(int type_monster, int time);
+	~Monster();
+
 	void create_monster();
 
 	void draw_monster();
@@ -38,6 +42,7 @@ private:
 	int velocity;
 	int resist;
 	int money;
+	int time;
 };
 
 #endif
