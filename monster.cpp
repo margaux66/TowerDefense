@@ -5,7 +5,7 @@ using namespace std;
 void Monster::create_monster(){
 	SDL_Rect pos = { 22 , 170};
 	if (type == 1){
-		image = getTexture(monster_1.png);
+		image = getTexture("image/monster_1.png");
 		velocity = 1;
 		resist = 2
 		money = 5;
@@ -13,7 +13,7 @@ void Monster::create_monster(){
 	}
 
 	else if (type == 2){
-		image = getTexture(monster_2.png);
+		image = getTexture("image/monster_2.png");
 		velocity = 2;
 		resist = 1;
 		money = 7;
