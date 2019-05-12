@@ -1,14 +1,22 @@
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 class Map{
 public:
 
-    int itd_verifCode(FILE* itd);
+    int checkItd(FILE* itd);
+    void drawRepere();
+    void afficheMap();
 
     /* Getters */
 
 
     /* Setters */
 
- 	Node* nodes;
+ 	GLuint tex;
+ 	SDL_Surface* ppm;
+
 
 	 
 
