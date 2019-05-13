@@ -1,4 +1,4 @@
-#include "tower.h"
+#include "./include/tower.h"
 
 using namespace std;
 
@@ -8,7 +8,7 @@ Tower::Tower(){
 
 Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), position(pos), time(timer){
 	if(type_tower ==1){
-		image = getTexture("image/tower_1.png");
+		image = getTexture("./image/tower_1.png");
 		cost = 100;
 		power =80;
 		distance =50;
@@ -16,7 +16,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 	}
 
 	else if(type_tower ==2){
-		image = getTexture("image/tower_1.png");
+		image = getTexture("./image/tower_1.png");
 		cost = 100;
 		power =50;
 		distance =20;
@@ -24,7 +24,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 	}
 
 	else if(type_tower ==3){
-		image = getTexture("image/tower_1.png");
+		image = getTexture("./image/tower_1.png");
 		cost = 30;
 		power =50;
 		distance =10;
@@ -32,7 +32,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 	}
 
 	else if(type_tower ==4){
-		image = getTexture("image/tower_1.png");
+		image = getTexture("./image/tower_1.png");
 		cost = 50;
 		power =30;
 		distance =65;
@@ -103,15 +103,15 @@ void Tower::draw_tower(){
 Gluint getTowerText(int type){
 	switch(type){
 		case 1:
-			return getTexture("image/tower_1");
+			return getTexture("./image/tower_1");
 		case 2:
-			return getTexture("image/tower_2");
+			return getTexture("./image/tower_2");
 		case 3:
-			return getTexture("image/tower_3");
+			return getTexture("./image/tower_3");
 		case 4:
-			return getTexture("image/tower_4");
+			return getTexture("./image/tower_4");
 		default:
-			return getTexture("image/tower_1");
+			return getTexture("./image/tower_1");
 	}
 }
 
