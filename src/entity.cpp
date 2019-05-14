@@ -1,4 +1,4 @@
-#include "./include/entity.h"
+#include "../include/entity.h"
 
 void update(){
 	glColor4f(255, 0, 0, 1);

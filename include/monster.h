@@ -9,10 +9,9 @@ class Monster {
 	//Méthodes
 public:
 	Monster();
-	Monster(int type_monster, int time);
 	~Monster();
 
-	void create_monster();
+	void create_monster(int type_monster, int time);
 
 	void draw_monster();
 
@@ -43,6 +42,7 @@ private:
 	int resist;
 	int money;
 	int time;
+	int wave;
 };
 
 #endif

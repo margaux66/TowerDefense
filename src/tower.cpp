@@ -1,4 +1,4 @@
-#include "./include/tower.h"
+#include "../include/tower.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 
 Tower::~Tower(){
 
-}
+};
 
 SDL_Rect Tower::getFrame(){
 	return this->current_frame;

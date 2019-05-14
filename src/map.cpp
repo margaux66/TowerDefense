@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string>
-#include "map.h"
+#include "../include/map.h"
 
 #define path "map.itd"
 
