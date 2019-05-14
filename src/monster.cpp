@@ -9,7 +9,7 @@ Monster::Monster(){
 void Monster::create_monster(int type_monster, int time){
 	SDL_Rect pos = { 22 , 170};
 	if (type == 1){
-		image = IMG_Load("./image/monster_1.png");
+		textures = IMG_Load("./image/monster_1.png");
 		velocity = 1;
 		resist = 2;
 		money = 5;
@@ -17,7 +17,7 @@ void Monster::create_monster(int type_monster, int time){
 	}
 
 	else if (type == 2){
-		image = IMG_Load("./image/monster_2.png");
+		textures = IMG_Load("./image/monster_2.png");
 		velocity = 2;
 		resist = 1;
 		money = 7;
@@ -39,8 +39,8 @@ SDL_Rect Monster::getPosition(){
 	return this->position;
 };
 
-SDL_Surface* Monster::getImage(){
-	return this->image;
+SDL_Surface* Monster::getTexture(){
+	return this->textures;
 };
 
 int Monster::getLife(){
@@ -69,7 +69,7 @@ int Monster::getMoney(){
 
 void Monster::draw_monster(){
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, &image);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glPushMatrix();
 	glScalef(20, 20, 1.f);
 	glBegin(GL_QUADS);
@@ -86,7 +86,7 @@ void Monster::draw_monster(){
 		glTexCoord2f(5.f,1.f);
 		glVertex2f(0.5, 0.5);
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, &image);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();	
 

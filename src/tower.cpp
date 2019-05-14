@@ -6,9 +6,9 @@ Tower::Tower(){
 
 };
 
-Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), position(pos), time(timer){
+Tower::Tower(int type_tower, SDL_Rect position, int time) : type(type_tower), position(position), timer(time){
 	if(type_tower ==1){
-		image = getTexture("./image/tower_1.png");
+		textures = IMG_Load("./image/tower_1.png");
 		cost = 100;
 		power =80;
 		distance =50;
@@ -16,7 +16,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 	}
 
 	else if(type_tower ==2){
-		image = getTexture("./image/tower_1.png");
+		textures = IMG_Load("./image/tower_1.png");
 		cost = 100;
 		power =50;
 		distance =20;
@@ -24,7 +24,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 	}
 
 	else if(type_tower ==3){
-		image = getTexture("./image/tower_1.png");
+		textures = IMG_Load("./image/tower_1.png");
 		cost = 30;
 		power =50;
 		distance =10;
@@ -32,7 +32,7 @@ Tower::Tower(int type_tower, SDL_Rect pos, int time) : type(type_tower), positio
 	}
 
 	else if(type_tower ==4){
-		image = getTexture("./image/tower_1.png");
+		textures = IMG_Load("./image/tower_1.png");
 		cost = 50;
 		power =30;
 		distance =65;
@@ -57,8 +57,8 @@ SDL_Rect Tower::getFirePos(){
 	return this->firePos;
 }
 
-SDL_Surface* Tower::getImage(){
-	return this->image;
+SDL_Surface* Tower::getTexture(){
+	return this->textures;
 }
 
 int Tower::getType(){
@@ -83,15 +83,15 @@ int Tower::getSpeed(){
 
 void Tower::draw_tower(){
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, image);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glPushMatrix();
-	glScalef(size.x, size.y, 1.f);
-	glBegin(GL.GL_LINE_LOOP);
-		for(int i=0, i<=300, i++){
-			double angle = 2 * Math.PI * i / 300;
-			double x = Math.cos(angle);
-			double y = Math.sin(angle);
-			gl.glVertex2d(x,y);
+	glScalef(25, 25, 1.f);
+	glBegin(GL_LINE_LOOP);
+		for(int i=0; i<=300; i++){
+			double angle = 2 * M_PI * i / 300;
+			double x = cos(angle);
+			double y = sin(angle);
+			glVertex2d(x,y);
 		}
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -100,18 +100,18 @@ void Tower::draw_tower(){
 
 };
 
-Gluint getTowerText(int type){
+SDL_Surface* getTexture(int type){
 	switch(type){
 		case 1:
-			return getTexture("./image/tower_1");
+			return IMG_Load("./image/tower_1");
 		case 2:
-			return getTexture("./image/tower_2");
+			return IMG_Load("./image/tower_2");
 		case 3:
-			return getTexture("./image/tower_3");
+			return IMG_Load("./image/tower_3");
 		case 4:
-			return getTexture("./image/tower_4");
+			return IMG_Load("./image/tower_4");
 		default:
-			return getTexture("./image/tower_1");
+			return IMG_Load("./image/tower_1");
 	}
 }
 
@@ -123,38 +123,38 @@ void Tower::fire(int time){
 	}
 }
 
-int Tower::touch(){
+int Tower::touch(Monster* monster){
 	int tch=0;
 	if(type ==1){
-		tch = monster->resist - type_tower.1((power*distance*speed)/3);
+		tch = monster->getResist() - ((this->power*this->distance*this->speed)/3);
 	}
 
 	else if(type ==2){
-		tch = monster->resist - type_tower.2((power*distance*speed)/3);
+		tch = monster->getResist() - ((this->power*this->distance*this->speed)/3);
 	}
 
 	else if(type ==3){
-		tch = monster->resist - type_tower.3((power*distance*speed)/3);
+		tch = monster->getResist() - ((this->power*this->distance*this->speed)/3);
 	}
 
 	else if(type ==4){
-		tch = monster->resist - type_tower.4((power*distance*speed)/3);
+		tch = monster->getResist() - ((this->power*this->distance*this->speed)/3);
 	}
 	return tch;
 }
 
-int Tower::colision(vector<Monster> *monsters){
+void Tower::colision(vector<Monster> *monsters){
 	int leftFire, leftMonster;
 	int rightFire, rightMonster;
 	int topFire, topMonster;
 	int bottomFire, bottomMonster;
 
 	leftFire = firePos.x;
-	rightFire = firePos.x + fire>w;
+	rightFire = firePos.x + firePos.w;
 	topFire = firePos.y;
-	bottomFire = firePos.y + fire->h
+	bottomFire = firePos.y + firePos.h;
 
-	for(vector<Monster>::iterator &monster = monsters->begin(); monster != monsters->end(), ++monster){
+	for(vector<Monster>::iterator monster = monsters->begin(); monster != monsters->end(); ++monster){
 		bool shoot = true;
 		leftMonster = monster->getPosition().x;
 		rightMonster = monster->getPosition().x + SIZEWIND;
@@ -171,8 +171,8 @@ int Tower::colision(vector<Monster> *monsters){
 			shoot = false;
 
 		if(shoot){
-			firePos.y = pos.y + (SIZEWIND/2);
-			monster->setLife(monster->getLife()-tch);
+			firePos.y = position.y + (SIZEWIND/2);
+			monster->setLife(monster->getLife()- this->touch(monsters*));
 			timer += SDL_GetTicks + 50;
 		}
 	}
@@ -180,7 +180,7 @@ int Tower::colision(vector<Monster> *monsters){
 
 int Tower::cost_tower(int type){
 	switch(type){
-		case 1;
+		case 1:
 			return 100;
 		case 2:
 			return 100;

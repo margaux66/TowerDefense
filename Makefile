@@ -1,7 +1,7 @@
 CC     = gcc
 CFLAGS = -Wall -O2 -Wno-unused-result -g
 LIB    = -lm
-OBJ    = game.o monster.o subsystems.o tower.o #map.o
+OBJ    = image.o game.o monster.o subsystems.o tower.o #map.o
 RM     = rm -f
 BIN    = bin
 DIRNAME = $(shell basename $$PWD)
@@ -14,12 +14,12 @@ all : $(OBJ)
 	@echo "            to execute type: $(BIN) &"
 	@echo "--------------------------------------------------------------"
 
-# entity.o : src/entity.cpp include/entity.h
-# 	@echo "compile entity"
-# 	$(CC) $(CFLAGS) -c $<  
-# 	@echo "done..."
+image.o : src/image.cpp include/image.h
+	@echo "compile image"
+	$(CC) $(CFLAGS) -c $<  
+	@echo "done..."
 
-# main.o : include/main.c include/entity.h include/game.h include/map.h include/monster.h include/subsystems.h include/tower.h
+# main.o : include/main.c include/image.h include/game.h include/map.h include/monster.h include/subsystems.h include/tower.h
 # 	@echo "compile main"
 # 	$(CC) $(CFLAGS) -c $<  
 # 	@echo "done..."
