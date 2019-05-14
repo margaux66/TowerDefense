@@ -10,12 +10,17 @@ public:
     void afficheMap();
 
     /* Getters */
-
+     char* getImage(){
+     	return image;
+     } 
 
     /* Setters */
+     void setImage(char* newImage){ image = newImage; }
 
+private:
  	GLuint tex;
  	SDL_Surface* ppm;
+ 	char* image;
 
 
 	 

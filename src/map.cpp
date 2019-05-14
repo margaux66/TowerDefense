@@ -3,68 +3,63 @@
 #include <string>
 #include "map.h"
 
-#define path "map.itd"
+#define path "./data/map.itd"
 
 int checkItd (FILE* itd){
-	 itd = fopen(path, "r");
-	 if(itd){
-	 	char compare = fgetc(itd); 
-	 	if (campare != "@"){
-			printf("Le fichier  n'est pas une carte valide.\n");
-			fclose(itd);
-			return 0;
-		}
-		char format[4];
-		format[] = "ITD"; 
-		for (int i = 0; i<3,i++){
-			if(fgetc(itd)!=format[i]){
+	FILE * itd;
+	char img[20];
+	int r, g, b;
+	int parcours = 0;
+	int count = 0;
+	Color3ub chemin, noeud, construct, in, out;
+	itd = fopen("map.itd", "r");
+	 	if(itd){
+			char ligne[100];		
+			char *retour0 = fgets(ligne,80,itd);
+
+			if(strcmp(retour0,"@ITD 1\n") != 0){
 				printf("Le fichier  n'est pas une carte valide.\n");
 				fclose(itd);
 				return 0;
 			}
-		}
-		switch(fgetc(itd)){
-			case 1 :
-				break;
-			default :
-				printf("Le fichier n'est pas une carte valide, la version demandé n'existe pas.\n");
+
+			char *retour1 = fgets(ligne,80,itd);
+			if(strcmp(retour1,"#premiere ligne de commentaire\n") != 0){
+				printf("Le fichier n'est pas une carte valide.\n");
 				fclose(itd);
-				return 0;					
-		}
-		char ligne[100];		
+				return 0;
+			}
 
+			fscanf(itd, "%s", img);
+			if( strcmp(img,"carte") == 0){
+				printf("yeah girl");
+				char* fichierPPM;
+				fscanf(itd, "%s", fichierPPM);
+				setImage(fichierPPM);
+			 	fclose(itd);
+			 	return 0;
+			}
+			else {
+				printf("Pb avec la ligne carte\n");
+				fclose(itd);
+			 	return 0;
+			}
 
-		char *retour = fgets(ligne,80,itd);
-		if(strcmp(retour,"#premiere ligne de commentaire") != 0){
-			printf("Le fichier  n'est pas une carte valide.\n");
-			printf("%s",retour);
+			while(parcours == 0){
+
+			}
+			fscanf(itd, "%s", img);
+			if( strcmp(img,"carte") == 0){
+				printf("yeah girl");
+				char* fichierPPM;
+				fscanf(itd, "%s", fichierPPM);
+				setImage(fichierPPM);
+			 	fclose(itd);
+			 	return 0;
+			}
 			fclose(itd);
-			return 0;
-		}
-
-		char *retour2 = fgets(ligne,80,itd);	
-		if( strcmp(retour2,"carte map.ppm") != 0){
-			printf("Le fichier  n'est pas une carte valide : problème à la ligne %s.\n", retour2 );
-		 	fclose(itd);
-		 	return 0;
-		}
-
-		char *retour3 = fgets(ligne,80,itd);	
-		if( strcmp(retour3,"chemin 255 255 255") != 0){
-			printf("Le fichier  n'est pas une carte valide : problème à la ligne %s.\n", retour3 );
-		 	fclose(itd);
-		 	return 0;
-		}
-
-		char *retour4 = fgets(ligne,80,itd);	
-		if( strcmp(retour4,"construct 152 255 128") != 0){
-			printf("Le fichier  n'est pas une carte valide : problème à la ligne %s.\n", retour4 );
-		 	fclose(itd);
-		 	return 0;
-		}
-
-
 	 }
+
 	 else{
 	 	fprintf(stderr, "Impossible d'ouvrir le fichier.\n");
 	 	return 0;
