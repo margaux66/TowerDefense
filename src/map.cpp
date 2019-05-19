@@ -1,71 +1,39 @@
 #include "../include/map.h"
 
-#define path "./data/map.itd"
+void drawMap(map map){
+	
+	glColor3ub(255,255,255);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, m->tex);
+	float texX = MAP_WIDTH/(m->ppm->w*1.0f);//*m->camPos.z));
+	float deltaX = 0.f;
 
-int checkItd (FILE* itd){
-	FILE * itd;
-	char img[20];
-	int r, g, b;
-	int parcours = 0;
-	int count = 0;
-	Color3ub chemin, noeud, construct, in, out;
-	itd = fopen("map.itd", "r");
-	 	if(itd){
-			char ligne[100];		
-			char *retour0 = fgets(ligne,80,itd);
+	float texY = MAP_HEIGHT/(m->ppm->h*1.0f);//*m->camPos.z));
+	float deltaY = 0.f;
 
-			if(strcmp(retour0,"@ITD 1\n") != 0){
-				printf("Le fichier  n'est pas une carte valide.\n");
-				fclose(itd);
-				return 0;
-			}
+	
+	glBegin(GL_QUADS);
+		glTexCoord2f(deltaX, deltaY);
+		glVertex2f(0.f, 50.f);
 
-			char *retour1 = fgets(ligne,80,itd);
-			if(strcmp(retour1,"#premiere ligne de commentaire\n") != 0){
-				printf("Le fichier n'est pas une carte valide.\n");
-				fclose(itd);
-				return 0;
-			}
+		glTexCoord2f(deltaX,texY+deltaY);
+		glVertex2f(0.f, MAP_HEIGHT+50.f);
 
-			fscanf(itd, "%s", img);
-			if( strcmp(img,"carte") == 0){
-				printf("yeah girl");
-				char* fichierPPM;
-				fscanf(itd, "%s", fichierPPM);
-				setImage(fichierPPM);
-			 	fclose(itd);
-			 	return 0;
-			}
-			else {
-				printf("Pb avec la ligne carte\n");
-				fclose(itd);
-			 	return 0;
-			}
+		glTexCoord2f(texX+deltaX,texY+deltaY); 
+		glVertex2f(MAP_WIDTH, MAP_HEIGHT+50.f);
 
-			while(parcours == 0){
+		glTexCoord2f(texX+deltaX,deltaY); 
+		glVertex2f(MAP_WIDTH, 50.f);
+	glEnd();
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
 
-			}
-			fscanf(itd, "%s", img);
-			if( strcmp(img,"carte") == 0){
-				printf("yeah girl");
-				char* fichierPPM;
-				fscanf(itd, "%s", fichierPPM);
-				setImage(fichierPPM);
-			 	fclose(itd);
-			 	return 0;
-			}
-			fclose(itd);
-	 }
-
-	 else{
-	 	fprintf(stderr, "Impossible d'ouvrir le fichier.\n");
-	 	return 0;
-	 }
 }
 
 void drawRepere(){
-	glBegin(GL_LINE);
-		glColor3ub(0,255,0);
+	glBegin(GL_LINES);
+		glColor3ub(0, 255 ,0);
 		glVertex2f(0,0);
 		glVertex2f(0,1);
 		glColor3ub(255, 0 ,0);
