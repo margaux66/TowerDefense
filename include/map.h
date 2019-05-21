@@ -1,28 +1,29 @@
-#include <SDL/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#ifndef DEF_map_H
+#define DEF_map_H 
 
-class Map{
+#include "../include/include.h"
+
+class map{
 public:
 
-    int checkItd(FILE* itd);
     void drawRepere();
     void afficheMap();
 
     /* Getters */
-     char* getImage(){
-     	return image;
-     } 
+    int getHeight(){ return height;}
+    int getWidth(){ return width;}
+    string getChemin(){ return chemin;}
 
     /* Setters */
-     void setImage(char* newImage){ image = newImage; }
+    void setHeight(int newHeight){ height = newHeight; }
+    void setWidth(int newWidth){ width = newWidth; }
+    void setChemin(string newChemin){ Chemin = newChemin; }
 
 private:
- 	GLuint tex;
- 	SDL_Surface* ppm;
- 	char* image;
-
-
+    int height;
+    int width;
+    string chemin;
 	 
 
 }
+#endif
