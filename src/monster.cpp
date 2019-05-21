@@ -39,7 +39,7 @@ SDL_Rect Monster::getPosition(){
 	return this->position;
 };
 
-SDL_Surface* Monster::getTexture(){
+SDL_Surface* Monster::getMTexture(){
 	return this->textures;
 };
 

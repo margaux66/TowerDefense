@@ -45,7 +45,7 @@ SDL_Rect Building::getBuildPos(){
 	return this->buildPos;
 }
 
-SDL_Surface* Building::getTexture(){
+SDL_Surface* Building::getBTexture(){
 	return this->textures;
 }
 
@@ -74,6 +74,7 @@ void Building::draw_building(){
 		for(int i=0; i<=300; i++){
 			double angle = 2 * M_PI * i / 300;
 			double x = cos(angle);
+
 			double y = sin(angle);
 			glVertex2d(x,y);
 		}
@@ -84,7 +85,7 @@ void Building::draw_building(){
 
 };
 
-SDL_Surface* getTexture(int type){
+SDL_Surface* getBTexture(int type){
 	switch(type){
 		case 1:
 			return IMG_Load("./image/building_1");
@@ -146,11 +147,14 @@ void Building::colision(vector<Tower> *towers){
 			buildPos.y = position.y + (SIZEWIND/2);
 			switch(type){
 				case 1:
-					tower->getDistance() + this->installation(towers*);
+					tower->getDistance() + this->installation(&(*tower));
+					break;
 				case 2:
-					tower->getPower() + this->installation(towers*);
+					tower->getPower() + this->installation(&(*tower));
+					break;
 				case 3:
-					tower->getSpeed() + this->installation(towers*);
+					tower->getSpeed() + this->installation(&(*tower));
+					break;
 			}
 		}
 	}

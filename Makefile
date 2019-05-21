@@ -1,7 +1,7 @@
-CC     = gcc
+CC     = g++
 CFLAGS = -Wall -O2 -Wno-unused-result -g
-LIB    = -lm
-OBJ    = building.o image.o game.o monster.o subsystems.o tower.o #map.o
+LIB    = -lm -lGL -lSDL -lSDL_image
+OBJ    = building.o image.o game.o monster.o main.o subsystems.o tower.o #map.o
 RM     = rm -f
 BIN    = bin/towerdefense
 DIRNAME = $(shell basename $$PWD)
@@ -24,10 +24,10 @@ image.o : src/image.cpp include/image.h
 	$(CC) $(CFLAGS) -c $<  
 	@echo "done..."
 
-# main.o : include/main.c include/image.h include/game.h include/map.h include/monster.h include/subsystems.h include/tower.h
-# 	@echo "compile main"
-# 	$(CC) $(CFLAGS) -c $<  
-# 	@echo "done..."
+main.o : src/main.cpp include/image.h include/game.h include/map.h include/monster.h include/subsystems.h include/tower.h
+	@echo "compile main"
+	$(CC) $(CFLAGS) -c $<  
+	@echo "done..."
 
 game.o : src/game.cpp include/game.h
 	@echo "compile game"

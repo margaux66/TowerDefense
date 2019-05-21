@@ -57,7 +57,7 @@ SDL_Rect Tower::getFirePos(){
 	return this->firePos;
 }
 
-SDL_Surface* Tower::getTexture(){
+SDL_Surface* Tower::getTTexture(){
 	return this->textures;
 }
 
@@ -100,7 +100,7 @@ void Tower::draw_tower(){
 
 };
 
-SDL_Surface* getTexture(int type){
+SDL_Surface* getTTexture(int type){
 	switch(type){
 		case 1:
 			return IMG_Load("./image/tower_1");
@@ -172,8 +172,8 @@ void Tower::colision(vector<Monster> *monsters){
 
 		if(shoot){
 			firePos.y = position.y + (SIZEWIND/2);
-			monster->setLife(monster->getLife()- this->touch(monsters*));
-			timer += SDL_GetTicks + 50;
+			monster->setLife(monster->getLife()- this->touch(&(*monster)));
+			timer += SDL_GetTicks() + 50;
 		}
 	}
 }

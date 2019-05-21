@@ -20,7 +20,7 @@ public:
 
 	SDL_Rect getFrame();
 	SDL_Rect getPosition();
-	SDL_Surface *getTexture();
+	SDL_Surface *getBTexture();
 	SDL_Rect getBuildPos();
 	int getType();
 	int getCost();
