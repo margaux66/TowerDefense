@@ -173,7 +173,7 @@ void Tower::colision(vector<Monster> *monsters){
 		if(shoot){
 			firePos.y = position.y + (SIZEWIND/2);
 			monster->setLife(monster->getLife()- this->touch(&(*monster)));
-			timer += SDL_GetTicks() + 50;
+			timer += SDL_GetTicks() + 10;
 		}
 	}
 }

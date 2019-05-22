@@ -5,7 +5,7 @@
 
 using namespace std;
 
-static const unsigned int WINDOW_WIDTH = 800;
+static const unsigned int WINDOW_WIDTH = 600;
 static const unsigned int WINDOW_HEIGHT = 600;
 static const char WINDOW_TITLE[] = "TOWER DEFENSE";
 
@@ -36,39 +36,77 @@ void reshape(SDL_Surface** surface, unsigned int width, unsigned int height){
 	}
 }
 
-// void drawsquare(int filled){
-// 	if(filled){
-// 		glBegin(GL_TRIANGLE_FAN);
-// 		glVertex2f(0.0, 0.0);
-// 	}
-// 	else{
-// 		glBegin(GL_LINE_STRIP);
-// 	}
-// 	glVertex2f(100, -100);
-// 	glVertex2f(100, 100);
-// 	glVertex2f(-100, 100);
-// 	glVertex2f(-100, -100);
-// 	glVertex2f(100, -100);
-// 	glEnd();
-// }
-
-// void draw(){
-// 	drawsquare(1);
-// }
-
 int main(int argc, char** argv){
 	if(-1 == SDL_Init(SDL_INIT_VIDEO)){
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme\n");
 		return EXIT_FAILURE;
 	}
 
-	SDL_Surface* surface;
+	SDL_Surface* surface, *texte=NULL;
+	SDL_Rect position;
+	TTF_Font *police = NULL;
+	SDL_Color couleur = {0, 0, 0};
 	reshape(&surface, WINDOW_WIDTH, WINDOW_HEIGHT);
 	SDL_WM_SetCaption(WINDOW_TITLE, NULL);
+
+	TTF_Init();
+	police = TTF_OpenFont("vogue.ttf", 50);
+	texte = TTF_RenderText_Blended(police, "Press enter", couleur);
+
+	char image_path[] = "image/map.ppm";
+	SDL_Surface* image = IMG_Load(image_path);
+	if(NULL == image){
+		fprintf(stderr, "Echec du chargement de l'image\n", image_path);
+		exit (EXIT_FAILURE);
+	}
+
+	GLuint texture_id;
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	GLenum format;
+
+	switch(image->format->BytesPerPixel){
+		case 1:
+		format = GL_RED;
+		break;
+		case 3:
+		format = GL_RGB;
+		break;
+		case 4:
+		format = GL_RGBA;
+		break;
+		default:
+		fprintf(stderr, "Format des pixels de l'image %s non supporte.\n", image_path);
+		return EXIT_FAILURE;
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	int loop = 1;
 	while(loop){
 		Uint32 timer = SDL_GetTicks();
+
+		glClear(GL_COLOR_BUFFER_BIT);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glPushMatrix();
+			glBegin(GL_QUADS);
+			glTexCoord2f(0,1);
+			glVertex2f(-70., -70.);
+			glTexCoord2f(1,1);
+			glVertex2f(70., -70.);
+			glTexCoord2f(1,0);
+			glVertex2f(70., 70.);
+			glTexCoord2f(0,0);
+			glVertex2f(-70., 70.);
+			glEnd();
+		glPopMatrix();
+
+		SDL_GL_SwapBuffers();
 
 		SDL_Event e;
 		while(SDL_PollEvent(&e)){
@@ -98,7 +136,29 @@ int main(int argc, char** argv){
 				break;
 			}
 		}
+
+		int continuer = 1;
+		while(continuer){
+			SDL_PollEvent(&e);
+			switch(e.type){
+				case SDL_QUIT:
+				continuer = 0;
+				break;
+			}
+		position.x = 60;
+		position.y = 350;
+		SDL_BlitSurface(texte, NULL, image, &position);
+		SDL_Flip(image);
+		}
 	}
+
+
+	TTF_CloseFont(police);
+	TTF_Quit();
+
+	glDeleteTextures(1, &texture_id);
+	SDL_FreeSurface(image);
+	SDL_FreeSurface(texte);
 	SDL_Quit();
 	return EXIT_SUCCESS;
 }

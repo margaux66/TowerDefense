@@ -1,6 +1,6 @@
 CC     = g++
 CFLAGS = -Wall -O2 -Wno-unused-result -g
-LIB    = -lm -lGL -lSDL -lGLU -lSDL_image
+LIB    = -lm -lGL -lSDL -lGLU -lSDL_image -lSDL_ttf
 OBJ    = building.o image.o game.o monster.o main.o subsystems.o tower.o #map.o
 RM     = rm -f
 BIN    = bin/towerdefense
