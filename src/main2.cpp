@@ -37,35 +37,81 @@ void reshape(SDL_Surface** surface, unsigned int width, unsigned int height){
 }
 
 int main(int argc, char** argv){
-	// if(-1 == SDL_Init(SDL_INIT_VIDEO)){
-	// 	fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme\n");
-	// 	return EXIT_FAILURE;
-	// }
+	if(-1 == SDL_Init(SDL_INIT_VIDEO)){
+		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme\n");
+		return EXIT_FAILURE;
+	}
 
-	SDL_Surface *ecran = NULL;
-	SDL_Surface *texte = NULL;
+	SDL_Surface* surface;
+	SDL_Surface *texte;
 	SDL_Rect position;
-	TTF_Font *police = NULL;
 	SDL_Color couleur = {0, 0, 0};
-	//reshape(&surface, WINDOW_WIDTH, WINDOW_HEIGHT);
-	//SDL_WM_SetCaption(WINDOW_TITLE, NULL);
+	reshape(&surface, WINDOW_WIDTH, WINDOW_HEIGHT);
+	SDL_WM_SetCaption(WINDOW_TITLE, NULL);
 
-	SDL_Init(SDL_INIT_VIDEO);
 	TTF_Init();
 	if (TTF_Init() ==-1){
-		fprintf(stderr, "Erreur d'initialisation : %s \n", TTF_GetError());
+		fprintf(stderr, "Erreur d'initialisation : %s \n", TTF_GetError() );
 		exit(EXIT_FAILURE);
 	}
-	
-	ecran = SDL_SetVideoMode(200, 200, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-	SDL_WM_SetCaption("Gestion du texte avec SDL_ttf", NULL);
-
+	TTF_Font *police = NULL;
 	police = TTF_OpenFont("vogue.ttf", 50);
 	texte = TTF_RenderText_Blended(police, "Press enter", couleur);
+
+	char image_path[] = "image/map.ppm";
+	SDL_Surface* image = IMG_Load(image_path);
+	if(NULL == image){
+		fprintf(stderr, "Echec du chargement de l'image\n", image_path);
+		exit (EXIT_FAILURE);
+	}
+
+	GLuint texture_id;
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	GLenum format;
+
+	switch(image->format->BytesPerPixel){
+		case 1:
+		format = GL_RED;
+		break;
+		case 3:
+		format = GL_RGB;
+		break;
+		case 4:
+		format = GL_RGBA;
+		break;
+		default:
+		fprintf(stderr, "Format des pixels de l'image %s non supporte.\n", image_path);
+		return EXIT_FAILURE;
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	int loop = 1;
 	while(loop){
 		Uint32 timer = SDL_GetTicks();
+
+		glClear(GL_COLOR_BUFFER_BIT);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texture_id);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glPushMatrix();
+			glBegin(GL_QUADS);
+			glTexCoord2f(0,1);
+			glVertex2f(-70., -70.);
+			glTexCoord2f(1,1);
+			glVertex2f(70., -70.);
+			glTexCoord2f(1,0);
+			glVertex2f(70., 70.);
+			glTexCoord2f(0,0);
+			glVertex2f(-70., 70.);
+			glEnd();
+		glPopMatrix();
+
+		SDL_GL_SwapBuffers();
 
 		SDL_Event e;
 		while(SDL_PollEvent(&e)){
@@ -78,24 +124,23 @@ int main(int argc, char** argv){
 				break;
 			}
 
-			
-		// 	switch(e.type){
-		// 		case SDL_VIDEORESIZE:
-		// 		reshape(&surface, e.resize.w, e.resize.h);
-		// 		break;
+			switch(e.type){
+				case SDL_VIDEORESIZE:
+				reshape(&surface, e.resize.w, e.resize.h);
+				break;
 
-		// 		case SDL_MOUSEBUTTONUP:
-		// 		printf("Clic en (%d, %d)\n", e.button.x, e.button.y);
-		// 		break;
+				case SDL_MOUSEBUTTONUP:
+				printf("Clic en (%d, %d)\n", e.button.x, e.button.y);
+				break;
 
-		// 		case SDL_KEYDOWN:
-		// 		printf("Touche pressed (code = %d)\n", e.key.keysym.sym);
-		// 		break;
+				case SDL_KEYDOWN:
+				printf("Touche pressed (code = %d)\n", e.key.keysym.sym);
+				break;
 
-		// 		default:
-		// 		break;
-		// 	}
-		// }
+				default:
+				break;
+			}
+		}
 
 		int continuer = 1;
 		while(continuer){
@@ -115,6 +160,9 @@ int main(int argc, char** argv){
 
 	TTF_CloseFont(police);
 	TTF_Quit();
+
+	glDeleteTextures(1, &texture_id);
+	SDL_FreeSurface(image);
 	SDL_FreeSurface(texte);
 	SDL_Quit();
 	return EXIT_SUCCESS;
