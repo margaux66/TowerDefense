@@ -6,7 +6,7 @@ Monster::Monster(){
 
 };
 
-void Monster::create_monster(int type_monster, int time){
+void Monster::create_monster(int type_monster){
 	SDL_Rect pos = { 22 , 170};
 	if (type == 1){
 		textures = IMG_Load("./image/monster_1.png");

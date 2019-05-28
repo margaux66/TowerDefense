@@ -12,7 +12,7 @@ public:
 	Monster();
 	~Monster();
 
-	void create_monster(int type_monster, int time);
+	void create_monster(int type_monste);
 
 	void draw_monster();
 
