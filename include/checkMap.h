@@ -11,6 +11,8 @@ public:
     ~checkMap();
     int checkItd();
     int checkedMap();
+    int getPixel(vector<int> pixels, int x, int y, int composante);
+    int loadPPM();
 
     /* Getters */
     string getImage(){ return image;}
@@ -20,7 +22,8 @@ public:
     vector<int> getIn(){ return in;}
     vector<int> getOut(){ return out;}
     vector<int> getNodeColor(){return nodeColor;}
-    vector<string> getNode(){ cout<< node[0];  return node; } 
+    vector<int> getData(){return data;}
+    vector<vector<int>> getNode(){ return node; } 
     int getNbNode(){ return nbNode;}   
 
     /* Setters */
@@ -31,7 +34,8 @@ public:
     void setIn(vector<int> newIn){ in = newIn; }
     void setOut(vector<int> newOut){ out = newOut; }
     void setNodeColor(vector<int> newNodeColor){ nodeColor = newNodeColor; }
-    void setNode(vector<string> newNode){ node = newNode;  }
+    void setData(vector<int> newData){ data = newData; }
+    void setNode(vector<vector<int>> newNode){ node = newNode;  }
     void setNbNode(int newNbNode){ nbNode = newNbNode; }
 
 private:
@@ -42,7 +46,8 @@ private:
     vector<int> in;
     vector<int> out;
     vector<int> nodeColor;
-	vector<string> node; 
+	vector<vector<int>> node;
+    vector<int> data; 
     int nbNode;
 
 };

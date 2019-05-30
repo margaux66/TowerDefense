@@ -13,6 +13,7 @@
 	#include <cstdlib>
 	#include <vector>
 	#include <fstream>
+	#include <sstream>
 	#include <math.h>
 
 	#define SIZEWIND 20
