@@ -137,7 +137,7 @@ int checkMap::checkItd (){
 			itd>>word;
 			vector<int> nodeColor;
 			if(word.compare("noeud") == 0){
-				//outt r, v ,b;
+				//cout r, v ,b;
 				itd>> r;
 				itd>> g;
 				itd>> b;
@@ -147,7 +147,7 @@ int checkMap::checkItd (){
 				this->setNodeColor(nodeColor);
 			}
 			else {
-			 	cout<< "Pb avec le out\n";
+			 	cout<< "Pb avec le noeud\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -193,41 +193,57 @@ int checkMap::checkedMap(){
 	//int nb_node = map.getNbNode();
 	if(this->checkItd()==1){
 		this->loadPPM();
-		vector<int> pixels = this->getData();
-		//cout << pixels[(3*22+3*170)+1] << "\n";
-		cout << this->getPixel(pixels,10,20,2) << "\n";
 		vector<vector<int>>nodes = this->getNode();
+		cout << nodes[0][2]<< "\n";
+		cout << nodes.size()<< "\n";
 		for(int i =0; i<nodes.size();i++){
 			switch(nodes[i][1]){
 				case 1:
-					if(this->getPixel(pixels,nodes[i][2],nodes[i][3],1)==this->getIn()[0]){
-						cout << "ok "<< i<<" \n";
+					if(this->getPixel(nodes[i][2],nodes[i][3],0)!=this->getIn()[0]){
+						cout << "npeo "<< i<<" \n";
 					}
-					if(this->getPixel(pixels,nodes[i][2],nodes[i][3],2)==this->getIn()[1]){
-						cout << "ok 2 "<< i<<" \n";
+					else if(this->getPixel(nodes[i][2],nodes[i][3],1)!=this->getIn()[1]){
+						cout << "nope"<< i<<" \n";
 					}
-					if(this->getPixel(pixels,nodes[i][2],nodes[i][3],3)==this->getIn()[2]){
-						cout << "ok 3 "<< i<<" \n";
+					else if(this->getPixel(nodes[i][2],nodes[i][3],2)!=this->getIn()[2]){
+						cout << "nope"<< i<<" \n";
 					}
-					//else{
-					//	cout << "gros soucy \n";
-					//}
-					cout << getPixel(pixels,nodes[i][2],nodes[i][3],0);
+					else{
+						cout << "Todo va bene avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
+					}
+					break;
 				case 2:
-					if(this->getPixel(pixels,nodes[i][2],nodes[i][3],1)==this->getOut()[0]){
-						cout << "ok "<< i<<" \n";
+				 	if(this->getPixel(nodes[i][2],nodes[i][3],0)!=this->getOut()[0]){
+				 		cout << "nope"<< i<<" \n";
+				 	}
+				 	else if(this->getPixel(nodes[i][2],nodes[i][3],1)!=this->getOut()[1]){
+				 		cout << "nope"<< i<<" \n";
+				 	}
+				 	else if(this->getPixel(nodes[i][2],nodes[i][3],2)!=this->getOut()[2]){
+				 		cout << "nope"<< i<<" \n";
+				 	}
+				 	else{
+						cout << "Todo va bene avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
 					}
-					if(this->getPixel(pixels,nodes[i][2],nodes[i][3],2)==this->getOut()[1]){
-						cout << "ok 2 "<< i<<" \n";
+					break;
+				case 3:
+				case 4:
+				 	if(this->getPixel(nodes[i][2],nodes[i][3],0)!=this->getNodeColor()[0]){
+				 		cout << "nope"<< i<<" \n";
+				 	}
+				 	else if(this->getPixel(nodes[i][2],nodes[i][3],1)!=this->getNodeColor()[1]){
+				 		cout << "nope"<< i<<" \n";
+				 	}
+				 	else if(this->getPixel(nodes[i][2],nodes[i][3],2)!=this->getNodeColor()[2]){
+				 		cout << "nope"<< i<<" \n";
+				 	}
+				 	else{
+						cout << "Todo va bene avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
 					}
-					if(this->getPixel(pixels,nodes[i][2],nodes[i][3],3)==this->getOut()[2]){
-						cout << "ok 3 "<< i<<" \n";
-					}
+				 	break;
 			}
 		}
-		//cout << "\n" << nodes[0][0];
 	}	
-
 
 	return 0;
 }
@@ -235,26 +251,44 @@ int checkMap::checkedMap(){
 int checkMap::loadPPM(){
 	ifstream ppm;
 	ppm.open(this->getImage());
-	string element;
-	ppm >> element;
-	if(element.compare("P3")!=0){
-		cout << "Problème avec le format PPM " << element << " au lieu de P3 \n";
+	if(ppm.is_open()){
+		string element;
+		ppm >> element;
+		if(element.compare("P3")!=0){
+			cout << "Problème avec le format PPM " << element << " au lieu de P3 \n";
+			return 0;
+		}
+		int parameters;
+		ppm >> parameters; 
+		this->setWidth(parameters);
+		cout<< "Width : " << this->getWidth() <<"\n";
+		ppm >> parameters;
+		this->setHeight(parameters);
+		cout<< "Height : " << this->getHeight() << "\n";
+		ppm >> parameters;
+		vector<unsigned int> pixels;
+		unsigned int composante;
+		int count = 0;
+		cout << "\n";
+		while(ppm >> composante){
+			//cout << composante;
+			pixels.push_back(composante);
+			count++;
+		}
+		cout << count << "  " << 200*200*3<< "\n";;
+		if (count =! (this->getWidth()*this->getHeight()*3))
+			cout << "Problème : la taille du ppm ne correspond pas";
+		this->setData(pixels);
 		return 0;
 	}
-	for(int i = 0; i<3; i++){
-		ppm >> element;
+	else{
+		cout << "Erreur à l'ouverture du fichier PPM \n";
+		return 0;
 	}
-	vector<int> pixels;
-	int composante;
-	while(ppm >> composante){
-		pixels.push_back(composante);
-	}
-	this->setData(pixels);
-	return 0;
 }
 
-int checkMap::getPixel(vector<int> pixels, int x, int y, int composante){
-	return pixels[(3*x+3*y)+composante];
+unsigned int checkMap::getPixel(int x, int y, int composante){
+	return this->data[(3*(y*this->width)+3*x)+composante];
 }
 
 void bresenham_x_y(int start_x, int start_y, int end_x, int end_y,
