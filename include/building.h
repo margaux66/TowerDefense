@@ -2,7 +2,7 @@
 #define DEF_BUILDING_H
 
 #include "include.h"
-#include "image.h"
+#include "utils.h"
 #include "tower.h"
 
 class Building{
@@ -12,7 +12,7 @@ public:
 	Building(int type_building, SDL_Rect position);
 	~Building();
 
-	void draw_building();
+	void draw_building(GLuint texture);
 	float installation(Tower* tower);
 	void colision(std::vector<Tower> *towers);
 	int cost_building(int type);

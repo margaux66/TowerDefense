@@ -30,7 +30,7 @@ Building::Building(int type_build, SDL_Rect position) : type(type_build), positi
 }
 
 Building::~Building(){
-
+	SDL_FreeSurface(this->getBTexture());
 };
 
 SDL_Rect Building::getFrame(){
@@ -65,52 +65,32 @@ float Building::getBonus(){
 	return this->bonus;
 }
 
-void Building::draw_building(){
+void Building::draw_building(GLuint texture){
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glPushMatrix();
-	glScalef(25, 25, 1.f);
-	glBegin(GL_LINE_LOOP);
-		for(int i=0; i<=300; i++){
-			double angle = 2 * M_PI * i / 300;
-			double x = cos(angle);
-
-			double y = sin(angle);
-			glVertex2d(x,y);
-		}
-	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glScalef(10, 10, 1.f);
+		drawCircle(1);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();	
-
 };
-
-SDL_Surface* getBTexture(int type){
-	switch(type){
-		case 1:
-			return IMG_Load("./image/building_1");
-		case 2:
-			return IMG_Load("./image/building_2");
-		case 3:
-			return IMG_Load("./image/building_3");
-		default:
-			return IMG_Load("./image/building_1");
-	}
-}
-
 
 float Building::installation(Tower* tower){
 	float install=0;
-	if(type ==1){
+	if(this->getType() ==1){
 		install = tower->getDistance() + (tower->getDistance()*1.25);
+		tower->setDistance(install);
 	}
 
-	else if(type ==2){
+	else if(this->getType() ==2){
 		install = tower->getPower() + (tower->getPower()*1.25);
+		tower->setPower(install);
 	}
 
-	else if(type ==3){
+	else if(this->getType() ==3){
 		install = tower->getSpeed() + (tower->getSpeed()*1.25);
+		tower->setSpeed(install);
 	}
 
 	return install;
@@ -145,30 +125,8 @@ void Building::colision(vector<Tower> *towers){
 
 		if(interval){
 			buildPos.y = position.y + (SIZEWIND/2);
-			switch(type){
-				case 1:
-					tower->getDistance() + this->installation(&(*tower));
-					break;
-				case 2:
-					tower->getPower() + this->installation(&(*tower));
-					break;
-				case 3:
-					tower->getSpeed() + this->installation(&(*tower));
-					break;
-			}
+			this->installation(&(*tower));
 		}
 	}
 }
 
-int Building::cost_building(int type){
-	switch(type){
-		case 1:
-			return 150;
-		case 2:
-			return 120;
-		case 3:
-			 return 100;
-		default:
-			return 100;
-	}
-}

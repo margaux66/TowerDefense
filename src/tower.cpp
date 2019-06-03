@@ -10,39 +10,44 @@ Tower::Tower(int type_tower, SDL_Rect position, int time) : type(type_tower), po
 	if(type_tower ==1){
 		textures = IMG_Load("./image/tower_1.png");
 		cost = 100;
-		power =80;
-		distance =50;
-		speed =20;
+		power =80.;
+		distance =50.;
+		speed =20.;
+		name = "Rouge";
+
 	}
 
 	else if(type_tower ==2){
 		textures = IMG_Load("./image/tower_2.png");
 		cost = 100;
-		power =50;
-		distance =20;
-		speed =80;
+		power =50.;
+		distance =20.;
+		speed =80.;
+		name = "Verte";
 	}
 
 	else if(type_tower ==3){
 		textures = IMG_Load("./image/tower_3.png");
 		cost = 30;
-		power =50;
-		distance =10;
-		speed =60;
+		power =50.;
+		distance =10.;
+		speed =60.;
+		name = "Jaune";
 	}
 
 	else if(type_tower ==4){
 		textures = IMG_Load("./image/tower_4.png");
 		cost = 50;
-		power =30;
-		distance =65;
-		speed =65;
+		power =30.;
+		distance =65.;
+		speed =65.;
+		name = "Bleue";
 	}
 
 }
 
 Tower::~Tower(){
-
+	SDL_FreeSurface(this->getTTexture());
 };
 
 SDL_Rect Tower::getFrame(){
@@ -69,51 +74,33 @@ int Tower::getCost(){
 	return this->cost;
 }
 
-int Tower::getPower(){
+float Tower::getPower(){
 	return this->power;
 }
 
-int Tower::getDistance(){
+float Tower::getDistance(){
 	return this->distance;
 }
 
-int Tower::getSpeed(){
+float Tower::getSpeed(){
 	return this->speed;
 }
+string Tower::getName(){
+	return this->name;
+}
 
-void Tower::draw_tower(){
+void Tower::draw_tower(GLuint texture){
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glPushMatrix();
-	glScalef(25, 25, 1.f);
-	glBegin(GL_LINE_LOOP);
-		for(int i=0; i<=300; i++){
-			double angle = 2 * M_PI * i / 300;
-			double x = cos(angle);
-			double y = sin(angle);
-			glVertex2d(x,y);
-		}
-	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glScalef(10, 10, 1.f);
+		drawCircle(1);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();	
 
 };
 
-SDL_Surface* getTTexture(int type){
-	switch(type){
-		case 1:
-			return IMG_Load("./image/tower_1");
-		case 2:
-			return IMG_Load("./image/tower_2");
-		case 3:
-			return IMG_Load("./image/tower_3");
-		case 4:
-			return IMG_Load("./image/tower_4");
-		default:
-			return IMG_Load("./image/tower_1");
-	}
-}
 
 void Tower::fire(int time){
 	if(time>=timer){
@@ -178,17 +165,12 @@ void Tower::colision(vector<Monster> *monsters){
 	}
 }
 
-int Tower::cost_tower(int type){
-	switch(type){
-		case 1:
-			return 100;
-		case 2:
-			return 100;
-		case 3:
-			 return 50;
-		case 4:
-			return 50;
-		default:
-			return 50;
-	}
+void Tower::informations(){
+	cout<<"----------------------------------------------- \n";
+	cout << "Information sur la tour : " << this->getName()<<" \n";
+	cout <<"Puissance : " << this->getPower()<<"\n";
+	cout <<"Cadence : " << this->getSpeed()<<"\n";
+	cout <<"Portée : " << this->getDistance()<<"\n";
+	cout <<"Coût : " << this->getCost()<<"\n";
+	cout<<"----------------------------------------------- \n";
 }

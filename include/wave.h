@@ -7,10 +7,11 @@
 using namespace std;
 
 class Wave {
+//Méthodes
+public:
 	Wave();
     ~Wave();
-	//Méthodes
-public:
+
 	/* Getters */
     int getCountWave(){ return countWave;}
     vector<Monster> getMonsters(){ return monsters;}
@@ -22,7 +23,7 @@ public:
 
 	//Attributs
 private:
-	int countWave;
+	int countWave = 0;
 	vector<Monster> monsters;
 
 };

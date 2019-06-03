@@ -5,7 +5,6 @@
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#include <SDL/SDL_image.h>
-	#include <SDL/SDL_ttf.h>
 	#include <stdlib.h>
 	#include <stdio.h>
 	#include <string>

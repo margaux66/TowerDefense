@@ -2,7 +2,6 @@
 #define DEF_MONSTER_H
 
 #include "include.h"
-#include "image.h"
 
 enum DirectMonster { UP, RIGHT, DOWN, LEFT};
 
@@ -12,7 +11,7 @@ public:
 	Monster();
 	~Monster();
 
-	void create_monster(int type_monste);
+	void create_monster(int type_monster, int time);
 
 	void draw_monster();
 
@@ -29,6 +28,7 @@ public:
 	int getVelocity();
 	int getResist();
 	int getMoney();
+	void setMoney(int new_money);
 
 	//Attributs
 private:
@@ -41,7 +41,7 @@ private:
 	int type;
 	int velocity;
 	int resist;
-	int money;
+	int money = 200;
 	int time;
 	int wave;
 };

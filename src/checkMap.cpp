@@ -22,7 +22,7 @@ int checkMap::checkItd (){
 			getline(itd,ligne);
 
 			if(ligne.compare("@ITD 1") != 0){
-				cout <<"Le fichier  n'est pas une carte valide.\n";
+				cout <<"Checkmap : Le fichier n'est pas une carte valide.\n";
 				itd.close();
 				return 0;
 			}
@@ -33,7 +33,7 @@ int checkMap::checkItd (){
 			getline(itd, ligne);
 			//cout<< ligne<< "\n";
 			if(ligne.compare("#premiere ligne de commentaire") != 0){
-			 	cout <<"Le fichier n'est pas une carte valide.\n";
+			 	cout <<"Checkmap : Le fichier n'est pas une carte valide.\n";
 			 	itd.close();
 			 	return 0;
 			}
@@ -53,7 +53,7 @@ int checkMap::checkItd (){
 				this->setImage(fichierPPM);
 			}
 			else {
-			 	cout<< "Pb avec la ligne carte\n";
+			 	cout<< "Checkmap : Pb avec la ligne carte\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -74,7 +74,7 @@ int checkMap::checkItd (){
 				this->setChemin(chemin);
 			}
 			else {
-			 	cout<< "Pb avec le chemin\n";
+			 	cout<< "Checkmap : Pb avec le chemin\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -93,7 +93,7 @@ int checkMap::checkItd (){
 				this->setConstruct(construct);
 			}
 			else {
-			 	cout<< "Pb avec le construct\n";
+			 	cout<< "Checkmap : Pb avec le construct\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -111,7 +111,7 @@ int checkMap::checkItd (){
 				this->setIn(in);
 			}
 			else {
-			 	cout<< "Pb avec le in\n";
+			 	cout<< "Checkmap : Pb avec le in\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -129,7 +129,7 @@ int checkMap::checkItd (){
 				this->setOut(out);
 			}
 			else {
-			 	cout<< "Pb avec le out\n";
+			 	cout<< "Checkmap : Pb avec le out\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -147,7 +147,7 @@ int checkMap::checkItd (){
 				this->setNodeColor(nodeColor);
 			}
 			else {
-			 	cout<< "Pb avec le noeud\n";
+			 	cout<< "Checkmap : Pb avec le noeud\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -170,7 +170,7 @@ int checkMap::checkItd (){
 				count = count+1;
 			}
 			if ((count) != nb_node){
-				cout<< "Pb avec les noeuds\n";
+				cout<< "Checkmap : Pb avec les noeuds\n";
 			 	itd.close();
 			  	return 0;
 			}
@@ -179,11 +179,11 @@ int checkMap::checkItd (){
 
 			itd.close();
 
-			cout << "Fichier .itd valide ! \n";
+			cout << "Checkmap : Fichier .itd valide ! \n";
 	 	}
 
 	 else{
-	 	cout << "Erreur à l'ouverture du fichier! \n";
+	 	cout << "Checkmap : Erreur à l'ouverture du fichier! \n";
 	 	return 0;
 	 }
 	 return 1;
@@ -194,57 +194,64 @@ int checkMap::checkedMap(){
 	if(this->checkItd()==1){
 		this->loadPPM();
 		vector<vector<int>>nodes = this->getNode();
-		cout << nodes[0][2]<< "\n";
-		cout << nodes.size()<< "\n";
 		for(int i =0; i<nodes.size();i++){
 			switch(nodes[i][1]){
 				case 1:
 					if(this->getPixel(nodes[i][2],nodes[i][3],0)!=this->getIn()[0]){
-						cout << "npeo "<< i<<" \n";
+						cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante r"<<"\n";
+						return 0;
 					}
 					else if(this->getPixel(nodes[i][2],nodes[i][3],1)!=this->getIn()[1]){
-						cout << "nope"<< i<<" \n";
+						cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante v"<<"\n";
+						return 0;
 					}
 					else if(this->getPixel(nodes[i][2],nodes[i][3],2)!=this->getIn()[2]){
-						cout << "nope"<< i<<" \n";
+						cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante b"<<"\n";
+						return 0;
 					}
 					else{
-						cout << "Todo va bene avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
+						cout << "Checkmap tout est OK le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
 					}
 					break;
 				case 2:
 				 	if(this->getPixel(nodes[i][2],nodes[i][3],0)!=this->getOut()[0]){
-				 		cout << "nope"<< i<<" \n";
+				 		cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante r"<<"\n";
+				 		return 0;
 				 	}
 				 	else if(this->getPixel(nodes[i][2],nodes[i][3],1)!=this->getOut()[1]){
-				 		cout << "nope"<< i<<" \n";
+				 		cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante v"<<"\n";
+				 		return 0;
 				 	}
 				 	else if(this->getPixel(nodes[i][2],nodes[i][3],2)!=this->getOut()[2]){
-				 		cout << "nope"<< i<<" \n";
+				 		cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante b"<<"\n";
+				 		return 0;
 				 	}
 				 	else{
-						cout << "Todo va bene avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
+						cout << "Checkmap tout est OK le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
 					}
 					break;
 				case 3:
 				case 4:
 				 	if(this->getPixel(nodes[i][2],nodes[i][3],0)!=this->getNodeColor()[0]){
-				 		cout << "nope"<< i<<" \n";
+				 		cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante r"<<"\n";
+				 		return 0;
 				 	}
 				 	else if(this->getPixel(nodes[i][2],nodes[i][3],1)!=this->getNodeColor()[1]){
-				 		cout << "nope"<< i<<" \n";
+				 		cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante v"<<"\n";
+				 		return 0;
 				 	}
 				 	else if(this->getPixel(nodes[i][2],nodes[i][3],2)!=this->getNodeColor()[2]){
-				 		cout << "nope"<< i<<" \n";
+				 		cout << "Checkmap problème avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<" composante b"<<"\n";
+				 		return 0;
 				 	}
 				 	else{
-						cout << "Todo va bene avec le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
+						cout << "Checkmap tout est OK le noeud : "<< nodes[i][2]<<","<<nodes[i][3]<<"\n";
 					}
 				 	break;
 			}
 		}
-	}	
-
+	return 1;
+	}
 	return 0;
 }
 
@@ -269,13 +276,9 @@ int checkMap::loadPPM(){
 		vector<unsigned int> pixels;
 		unsigned int composante;
 		int count = 0;
-		cout << "\n";
 		while(ppm >> composante){
-			//cout << composante;
 			pixels.push_back(composante);
-			count++;
 		}
-		cout << count << "  " << 200*200*3<< "\n";;
 		if (count =! (this->getWidth()*this->getHeight()*3))
 			cout << "Problème : la taille du ppm ne correspond pas";
 		this->setData(pixels);
@@ -290,6 +293,8 @@ int checkMap::loadPPM(){
 unsigned int checkMap::getPixel(int x, int y, int composante){
 	return this->data[(3*(y*this->width)+3*x)+composante];
 }
+
+
 
 void bresenham_x_y(int start_x, int start_y, int end_x, int end_y,
 									 void (*visitor)(int, int, int, void**), int argc, void** argv)

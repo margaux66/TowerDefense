@@ -6,7 +6,7 @@ Monster::Monster(){
 
 };
 
-void Monster::create_monster(int type_monster){
+void Monster::create_monster(int type_monster, int time){
 	SDL_Rect pos = { 22 , 170};
 	if (type == 1){
 		textures = IMG_Load("./image/monster_1.png");
@@ -66,6 +66,9 @@ int Monster::getResist(){
 int Monster::getMoney(){
 	return this->money;
 };
+void Monster::setMoney(int new_money){
+	this->money += new_money;
+}
 
 void Monster::draw_monster(){
 	glEnable(GL_TEXTURE_2D);
