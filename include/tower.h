@@ -1,6 +1,7 @@
 #ifndef DEF_TOWER_H
 #define DEF_TOWER_H
 
+//include
 #include "include.h"
 #include "monster.h"
 #include "utils.h"
@@ -8,17 +9,18 @@
 using namespace std;
 
 class Tower{
+	
 	//Méthodes
 public:
-	Tower();
-	Tower(int type_tower, SDL_Rect position, int time);
-	~Tower();
+	Tower(); //constructeur
+	Tower(int type_tower, SDL_Rect position, int time); //parametre des tours
+	~Tower(); //destrcuteur
 
-	void draw_tower(GLuint texture);
-	void fire(int time);
-	int touch(Monster* monster);
-	void colision(std::vector<Monster> *monsters);
-	void informations();
+	void draw_tower(GLuint texture); //dessin de la tour
+	void fire(int time); //tir des tours
+	int touch(Monster* monster); //toucher un monstre
+	void colision(std::vector<Monster> *monsters); //gestion des collisions
+	void informations(); //informations sur les tours : type, cadence, puissance, portee
 
 	//getters
 	SDL_Rect getFrame();
@@ -31,11 +33,13 @@ public:
 	float getDistance();
 	float getSpeed();
 	string getName();
+	
 	//setters
 	void setPosition(SDL_Rect newPosition){ position = newPosition;}
 	void setDistance(float newDistance){ distance = newDistance;}
 	void setPower(float newPower){ power = newPower;}
 	void setSpeed(float newSpeed){ speed = newSpeed;}
+	
 	//Attributs
 private:
 	SDL_Rect current_frame;
@@ -51,4 +55,4 @@ private:
 	string name;
 };
 
-#endif
+#endif /* TOWER_H */

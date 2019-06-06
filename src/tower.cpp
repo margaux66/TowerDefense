@@ -3,7 +3,6 @@
 using namespace std;
 
 Tower::Tower(){
-
 };
 
 Tower::Tower(int type_tower, SDL_Rect position, int time) : type(type_tower), position(position), timer(time){
@@ -14,7 +13,6 @@ Tower::Tower(int type_tower, SDL_Rect position, int time) : type(type_tower), po
 		distance =50.;
 		speed =20.;
 		name = "Rouge";
-
 	}
 
 	else if(type_tower ==2){
@@ -43,7 +41,6 @@ Tower::Tower(int type_tower, SDL_Rect position, int time) : type(type_tower), po
 		speed =65.;
 		name = "Bleue";
 	}
-
 }
 
 Tower::~Tower(){
@@ -100,7 +97,6 @@ void Tower::draw_tower(GLuint texture){
 	glPopMatrix();	
 
 };
-
 
 void Tower::fire(int time){
 	if(time>=timer){

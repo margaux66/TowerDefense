@@ -1,7 +1,7 @@
 CC     = g++
 CFLAGS = -Wall -O2 -Wno-unused-result -g
 LIB    = -lm -lGL -lSDL -lGLU -lSDL_image 
-OBJ    = building.o game.o monster.o main.o tower.o checkMap.o wave.o timer.o utils.o #map.o 
+OBJ    = building.o monster.o main.o tower.o checkMap.o wave.o timer.o utils.o map.o 
 RM     = rm -f
 BIN    = bin/towerdefense
 DIRNAME = $(shell basename $$PWD)
@@ -19,15 +19,15 @@ building.o : src/building.cpp include/building.h
 	$(CC) $(CFLAGS) -c $<  
 	@echo "done..."
 
-main.o : src/main.cpp include/game.h include/map.h include/monster.h include/timer.h include/tower.h include/wave.h include/utils.h include/checkMap.h include/building.h
+main.o : src/main.cpp include/map.h include/monster.h include/timer.h include/tower.h include/wave.h include/utils.h include/checkMap.h include/building.h include/map.h
 	@echo "compile main"
 	$(CC) $(CFLAGS) -c $<  
 	@echo "done..."
 
-game.o : src/game.cpp include/game.h
-	@echo "compile game"
-	$(CC) $(CFLAGS) -c $<  
-	@echo "done..."
+# game.o : src/game.cpp include/game.h
+# 	@echo "compile game"
+# 	$(CC) $(CFLAGS) -c $<  
+# 	@echo "done..."
 
 timer.o : src/timer.cpp include/timer.h
 	@echo "compile timer"
@@ -49,10 +49,10 @@ wave.o : src/wave.cpp include/wave.h
 	$(CC) $(CFLAGS) -c $<
 	@echo "done..."
 
-# map.o : src/map.cpp include/map.h
-# 	@echo "compile map"
-# 	$(CC) $(CFLAGS) -c $<  
-# 	@echo "done..."
+map.o : src/map.cpp include/map.h
+	@echo "compile map"	
+	$(CC) $(CFLAGS) -c $<  
+	@echo "done..."
 
 monster.o : src/monster.cpp include/monster.h
 	@echo "compile monster"

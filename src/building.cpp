@@ -3,7 +3,6 @@
 using namespace std;
 
 Building::Building(){
-
 };
 
 Building::Building(int type_build, SDL_Rect position) : type(type_build), position(position){

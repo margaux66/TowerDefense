@@ -13,11 +13,13 @@ public:
 
 	void create_monster(int type_monster, int time);
 
-	void draw_monster();
+	void draw_monster(GLuint texture);
 
 	void update_monster();
 
 	void dead_monster();
+
+	void deplacement(int avancee_monster);
 
 	SDL_Rect getFrame();
 	SDL_Rect getPosition();
@@ -29,7 +31,7 @@ public:
 	int getResist();
 	int getMoney();
 	void setMoney(int new_money);
-
+	void setPosition(SDL_Rect newPosition){ position = newPosition;}
 	//Attributs
 private:
 

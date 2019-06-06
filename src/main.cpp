@@ -2,9 +2,9 @@
 #include "../include/monster.h"
 #include "../include/tower.h"
 #include "../include/building.h"
-#include "../include/timer.h"
 #include "../include/wave.h"
 #include "../include/checkMap.h"
+#include "../include/map.h"
 
 using namespace std;
 
@@ -42,17 +42,20 @@ int main(int argc, char** argv){
 	checkMap verif;
 	verif.setPath("./data/map.itd");
 	if(verif.checkedMap()==1){
-		float tempsDepart = 0;
-		Timer time;
-		time.start();
-
+		unsigned int tempsDepart = 0;
+		bool paused = false;
+		unsigned int tempsPause = 0;
+		int debut =0;
 		if(-1 == SDL_Init(SDL_INIT_VIDEO)){
 			fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme\n");
 			return EXIT_FAILURE;
 		}
 		SDL_Surface* surface;
-		Monster monster;
+		Monster joueur;
 		Wave wave;
+		wave.create_wave();
+		int accueil = 0;
+		int help = 1, help2 =0;
 
 		putenv("SDL_VIDEO_WINDOW_POS=0,0");
 		reshape(&surface, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -61,6 +64,10 @@ int main(int argc, char** argv){
 		SDL_Rect position;
 		GLuint texture_map = loadTexture(loadImage( IMG_Load("./image/map.ppm")));
 		GLuint map = loadTexture(loadImage(IMG_Load("./image/carte.ppm")));
+		GLuint accueilText = loadTexture(loadImage(IMG_Load("./image/accueil.png")));
+		GLuint helpText = loadTexture(loadImage(IMG_Load("./image/help.png")));
+		GLuint helpText2 = loadTexture(loadImage(IMG_Load("./image/help2.png")));
+		GLuint pauseText = loadTexture(loadImage(IMG_Load("./image/pause.png")));
 
 		vector<Tower*> allTower;
 		Tower t = Tower(1,position,0);
@@ -88,44 +95,23 @@ int main(int argc, char** argv){
 		Building b3 = Building(3,position);
 		GLuint texture_b3 = loadTexture(loadImage(b3.getBTexture()));	
 
+		vector<GLuint> monstersText;
+		vector<Monster>monsters = wave.getMonsters();
+		for(int i =0; i<monsters.size(); i++){
+			monstersText.push_back(loadTexture(loadImage(monsters[i].getMTexture())));
+		} 
+
 		int loop = 1;
 		int premTour =0, secTour=0, troiTour = 0,quatreTour =0, premBuild=0, secBuild = 0, troiBuild=0;
+
+		int avancee_monster=0;
+		int count =0;
+		SDL_Rect pos;
+		int avancee_pause =0;
 		while(loop){
-			glClear(GL_COLOR_BUFFER_BIT);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, texture_map);
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			glPushMatrix();
-				glBegin(GL_QUADS);
-				glTexCoord2f(0,1);
-				glVertex2f(-70., -70.);
-				glTexCoord2f(1,1);
-				glVertex2f(70., -70.);
-				glTexCoord2f(1,0);
-				glVertex2f(70., 70.);
-				glTexCoord2f(0,0);
-				glVertex2f(-70., 70.);
-				glEnd();
-			glPopMatrix();
-			
-			glClear(GL_COLOR_BUFFER_BIT);
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, map);
-			glMatrixMode(GL_MODELVIEW);
-			glLoadIdentity();
-			glPushMatrix();
-				glBegin(GL_QUADS);
-				glTexCoord2f(0,1);
-				glVertex2f(-70., -70.);
-				glTexCoord2f(1,1);
-				glVertex2f(70., -70.);
-				glTexCoord2f(1,0);
-				glVertex2f(70., 70.);
-				glTexCoord2f(0,0);
-				glVertex2f(-70., 70.);
-				glEnd();
-			glPopMatrix();
+			SDL_Delay (500);
+			drawMap(texture_map);
+			drawMap(map);
 
 			if(premTour==1){
 				position.x = -20;
@@ -183,6 +169,43 @@ int main(int argc, char** argv){
 					b.draw_building(texture_b3);
 				glPopMatrix();
 			}
+
+			if(accueil == 0){
+				drawMap(accueilText);
+				if(help == 0){
+					drawMap(helpText);
+				}
+			}
+			if (debut == 1){
+				for (int i =0; i<monstersText.size();i++){
+					glPushMatrix();
+						glTranslatef(monsters[i].getPosition().x,monsters[i].getPosition().y-i*15,0);
+						monsters[i].draw_monster(monstersText[i]);
+					glPopMatrix();
+
+				}
+				avancee_monster = avancee_monster+1;
+				usleep(1000);
+				if(paused){
+					count++;
+					avancee_pause = avancee_monster;
+				}
+				if(paused != true){
+					if(avancee_pause == 0){
+						monsters[0].deplacement(avancee_monster);
+					}
+					else{
+						monsters[0].deplacement(avancee_monster-(avancee_pause-count*5));
+					}
+				}
+
+			}
+			if(help2 == 1){
+				drawMap(helpText2);
+			}
+			if(paused == true){
+				drawMap(pauseText);
+			}
 			SDL_GL_SwapBuffers();
 
 			SDL_Event e;
@@ -200,24 +223,43 @@ int main(int argc, char** argv){
 
 
 				switch(e.type){
-					case SDL_VIDEORESIZE:
-					reshape(&surface, e.resize.w, e.resize.h);
-					break;
+					// case SDL_VIDEORESIZE:
+					// reshape(&surface, e.resize.w, e.resize.h);
+					// break;
 
 					case SDL_MOUSEBUTTONUP:
-					printf("Clic en (%d, %d)\n", e.button.x, e.button.y);
+						if(e.button.x<544 && e.button.x>248 ){
+							if(e.button.y<336 && e.button.y>243){
+								accueil = 1;
+							}
+						}
+						
+						if(e.button.x<544 && e.button.x>248 ){
+							if(e.button.y<480 && e.button.y>384){
+								help = 0;
+							}	
+						}
+						if(e.button.x<263 && e.button.x>208 ){
+							if(e.button.y<101 && e.button.y>52){
+								help = 1;
+								accueil =0;
+							}	
+						}
+						
 					break;
 
 					case SDL_KEYDOWN:
 						//met la partie en pause si elle n'est pas en pause
 						//la remet en route si elle était en pause
 						if (e.key.keysym.sym == SDLK_p){
-							if(time.isPaused()==true){
-								time.unpause();
-								cout<< "La partie a repris \n";
+							if(paused==true){
+								paused = false;
+								tempsPause = (SDL_GetTicks()-tempsPause);
+								cout<< "La partie a repris (temps de pause = "<< tempsPause/1000<<") \n";
 							}
 							else{
-						 		time.pause();
+						 		paused = true;
+						 		tempsPause = SDL_GetTicks();
 					 			cout << "La partie est en pause \n";
 						 	}
 						}
@@ -229,7 +271,6 @@ int main(int argc, char** argv){
 									break;
 								case 0 :
 									premTour = 1;
-									t.informations();
 									break;
 							}
 						}
@@ -240,7 +281,6 @@ int main(int argc, char** argv){
 									break;
 								case 0 :
 									secTour = 1;
-									t2.informations();
 									break;
 							}	
 						}
@@ -251,7 +291,6 @@ int main(int argc, char** argv){
 									break;
 								case 0 :
 									troiTour = 1;
-									t3.informations();
 									break;
 							}
 
@@ -263,7 +302,6 @@ int main(int argc, char** argv){
 									break;
 								case 0 :
 									quatreTour = 1;
-									t4.informations();
 									break;
 							}					 	
 						}
@@ -298,9 +336,13 @@ int main(int argc, char** argv){
 							}					 		
 						}
 						if(e.key.keysym.sym ==SDLK_i){
-							cout << "Temps écoulé : " <<(SDL_GetTicks()-tempsDepart)/1000<< " en seconde. \n";
-							//printf("Temps écoulé : %.3f en sec ondes\n", time.getTicks()/1000);
-							printf("Argent : %d\n", monster.getMoney());
+							if(tempsDepart != 0){
+								cout << "Temps écoulé : " <<(SDL_GetTicks()-(tempsDepart+tempsPause))/1000<< " en seconde. \n";
+							}
+							else{
+								cout << "Temps écoulé : " <<0<< " en seconde. \n";
+							}
+							printf("Argent : %d\n", joueur.getMoney());
 							printf("Vague n°%d\n", wave.getCountWave());
 							printf("-----------------------------------------\n");
 							break;
@@ -314,11 +356,26 @@ int main(int argc, char** argv){
 							printf("Appuyez sur p pour mettre le jeu en pause\n");
 							printf("Cliquez sur la croix, appuyer sur echap ou q pour quitter le jeu\n");
 							printf("-----------------------------------------\n");
+							if(help2 == 1){
+								help2 = 0;
+							}
+							else{
+								help2 = 1;
+							}
+							break;
 						}
+						if(e.key.keysym.sym == SDLK_m){
+							for (int i =0; i<allTower.size();i++){
+								allTower[i]->informations();
+							}
+							break;
+						}						
 						if(e.key.keysym.sym == SDLK_SPACE){
-							wave.create_wave();
-							tempsDepart = SDL_GetTicks()/1000;
-							printf("Bonne chance\n");
+							if (tempsDepart == 0){
+								debut = 1;
+								tempsDepart = SDL_GetTicks();
+								printf("Bonne chance\n");
+							}
 							break;
 						}								
 					break;
@@ -327,6 +384,7 @@ int main(int argc, char** argv){
 					break;
 				}
 			}
+
 		}
 		
 		if(premTour==0){

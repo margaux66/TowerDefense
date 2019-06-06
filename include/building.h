@@ -1,23 +1,25 @@
 #ifndef DEF_BUILDING_H
 #define DEF_BUILDING_H
 
+//include
 #include "include.h"
 #include "utils.h"
 #include "tower.h"
 
 class Building{
-	//Méthodes
+	
+//Méthodes
 public:
-	Building();
-	Building(int type_building, SDL_Rect position);
-	~Building();
+	Building(); //constructeur
+	Building(int type_building, SDL_Rect position); //parametre des batiments
+	~Building(); //destructeur
 
-	void draw_building(GLuint texture);
-	float installation(Tower* tower);
-	void colision(std::vector<Tower> *towers);
-	int cost_building(int type);
+	void draw_building(GLuint texture); //dessin dess sprites des batiments
+	float installation(Tower* tower); //gestion des ameliorations en fonction du type de tour et de ses parametre
+	void colision(std::vector<Tower> *towers); //gestion de la colision avec la tour
+	int cost_building(int type); //gestion de l'achat d'un batiment
 
-
+	//getteurs
 	SDL_Rect getFrame();
 	SDL_Rect getPosition();
 	SDL_Surface *getBTexture();
@@ -27,7 +29,7 @@ public:
 	int getDistance();
 	float getBonus();
 
-	//Attributs
+//Attributs
 private:
 	SDL_Rect current_frame;
 	SDL_Rect position;
@@ -39,4 +41,4 @@ private:
 	float bonus;
 };
 
-#endif
+#endif /* BUILDING_H */

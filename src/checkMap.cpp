@@ -3,10 +3,9 @@
 using namespace std;
 
 checkMap::checkMap(){
-
 };
-checkMap::~checkMap(){
 
+checkMap::~checkMap(){
 };
 
 int checkMap::checkItd (){
@@ -26,9 +25,6 @@ int checkMap::checkItd (){
 				itd.close();
 				return 0;
 			}
-			//else{
-			//	cout<< "OKKKK \n";
-			//}
 
 			getline(itd, ligne);
 			//cout<< ligne<< "\n";
@@ -37,19 +33,13 @@ int checkMap::checkItd (){
 			 	itd.close();
 			 	return 0;
 			}
-			//else{
-			//	cout<< "OKKKK \n";
-			//}
-
-			//getline(itd, ligne);
 
 			string word;
 			itd>>word;
-			//cout<<word<<"\n";
+
 			if(word.compare("carte") == 0){
 			 	string fichierPPM;
 				itd>> fichierPPM;
-				//cout<< fichierPPM <<"\n";
 				this->setImage(fichierPPM);
 			}
 			else {
@@ -65,9 +55,6 @@ int checkMap::checkItd (){
 				itd>> r;
 				itd>> g;
 				itd>> b;
-				//chemin[0]=r;
-				//chemin[1]=g;
-				//chemin[2]=b;
 				chemin.push_back(r);
 				chemin.push_back(g);
 				chemin.push_back(b);
@@ -119,7 +106,7 @@ int checkMap::checkItd (){
 			itd>>word;
 			vector<int> out;
 			if(word.compare("out") == 0){
-				//outt r, v ,b;
+				//out r, v ,b;
 				itd>> r;
 				itd>> g;
 				itd>> b;
@@ -154,7 +141,6 @@ int checkMap::checkItd (){
 
 
 			itd>>nb_node;
-			//cout << nb_node<< "\n";
 			itd.seekg(1, itd.cur);
 			this->setNbNode(nb_node);
 
@@ -176,9 +162,7 @@ int checkMap::checkItd (){
 			}
 			cout.flush();
 			this->setNode(nodes);			
-
 			itd.close();
-
 			cout << "Checkmap : Fichier .itd valide ! \n";
 	 	}
 
@@ -190,7 +174,6 @@ int checkMap::checkItd (){
 }
 
 int checkMap::checkedMap(){
-	//int nb_node = map.getNbNode();
 	if(this->checkItd()==1){
 		this->loadPPM();
 		vector<vector<int>>nodes = this->getNode();
@@ -296,9 +279,7 @@ unsigned int checkMap::getPixel(int x, int y, int composante){
 
 
 
-void bresenham_x_y(int start_x, int start_y, int end_x, int end_y,
-									 void (*visitor)(int, int, int, void**), int argc, void** argv)
-{
+void bresenham_x_y(int start_x, int start_y, int end_x, int end_y, void (*visitor)(int, int, int, void**), int argc, void** argv){
 	int dx = abs(end_x - start_x);
 	int dy = abs(end_y - start_y);
 
@@ -307,29 +288,23 @@ void bresenham_x_y(int start_x, int start_y, int end_x, int end_y,
 	int inc_y = end_y > start_y ? 1 : -1;
 	int inc_x = end_x > start_x ? 1 : -1;
 	int x=start_x, y=start_y;
-	if (inc_x>0)
-	{
-		while (x<end_x)
-		{
+	if (inc_x>0){
+		while (x<end_x){
 			(*visitor)(x, y, argc, argv);
 			++x;
 			e+=inc_ex;
-			if (e>0)
-			{
+			if (e>0){
 				y+=inc_y;
 				e+=inc_ey;
 			}
 		}
 	}
-	else
-	{
-		while (x>end_x)
-		{
+	else{
+		while (x>end_x){
 			(*visitor)(x, y, argc, argv);
 			--x;
 			e+=inc_ex;
-			if (e>0)
-			{
+			if (e>0){
 				y+=inc_y;
 				e+=inc_ey;
 			}
@@ -338,9 +313,7 @@ void bresenham_x_y(int start_x, int start_y, int end_x, int end_y,
 	(*visitor)(x, y, argc, argv);
 }
 
-void bresenham_y_x(int start_x, int start_y, int end_x, int end_y,
-									 void (*visitor)(int, int, int, void**), int argc, void** argv)
-{
+void bresenham_y_x(int start_x, int start_y, int end_x, int end_y, void (*visitor)(int, int, int, void**), int argc, void** argv){
 	int dx = abs(end_x - start_x);
 	int dy = abs(end_y - start_y);
 
@@ -349,29 +322,23 @@ void bresenham_y_x(int start_x, int start_y, int end_x, int end_y,
 	int inc_y = end_y > start_y ? 1 : -1;
 	int inc_x = end_x > start_x ? 1 : -1;
 	int x=start_x, y=start_y;
-	if (inc_y>0)
-	{
-		while (y<end_y)
-		{
+	if (inc_y>0){
+		while (y<end_y){
 			(*visitor)(x, y, argc, argv);
 			++y;
 			e+=inc_ey;
-			if (e>0)
-			{
+			if (e>0){
 				x+=inc_x;
 				e+=inc_ex;
 			}
 		}
 	}
-	else
-	{
-		while (y>end_y)
-		{
+	else{
+		while (y>end_y){
 			(*visitor)(x, y, argc, argv);
 			--y;
 			e+=inc_ey;
-			if (e>0)
-			{
+			if (e>0){
 				x+=inc_x;
 				e+=inc_ex;
 			}

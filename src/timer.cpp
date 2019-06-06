@@ -2,80 +2,50 @@
 
 using namespace std; 
 
-Timer::Timer()
-{
-	startTicks = 0.;
-	pausedTicks = 0.;
-	paused = false;
-	started = false;
+Timer::Timer(){
+};
+
+Timer::~Timer(){
+};
+
+void Timer::start(){
+	this->setStarted(true);
+	this->setPaused(false);
+	this->setStartTicks(SDL_GetTicks());
+	cout << SDL_GetTicks()<<"\n";
+	cout << this->getStartTicks()/1000;
 }
 
 
-Timer::~Timer()
-{
+void Timer::pause(){
+	if (this->getStarted() && !this->getPaused()){
+		this->setPaused(true);
+		this->setPausedTicks(SDL_GetTicks() - this->getStartTicks());
+	}
 }
 
-
-void Timer::start()
-{
-	started = true;
-	paused = false;
-	
-	startTicks = SDL_GetTicks();
-}
-
-
-void Timer::pause()
-{
-	if (started && !paused)
-	{
-		paused = true;
-
-		pausedTicks = SDL_GetTicks() - startTicks;
+void Timer::unpause(){
+	if (this->getPaused()){
+		this->setPaused(false);
+		this->setStartTicks(SDL_GetTicks() - this->getPausedTicks());
+		this->setPausedTicks(0.);
 	}
 }
 
 
-void Timer::unpause()
-{
-	if (paused)
-	{
-		paused = false;
-		
-		startTicks = SDL_GetTicks() - pausedTicks;
-		pausedTicks = 0.;
-	}
+void Timer::stop(){
+	this->setStarted(false);
+	this->setPaused(false);
 }
 
 
-void Timer::stop()
-{
-	started = false;
-	paused = false;
-}
-
-
-int Timer::getTicks()
-{
-	if (started)
-	{
-		if (paused)
-			return pausedTicks;
+unsigned int Timer::getTicks(){
+	if (getStarted()){
+		if (getPaused())
+			return this->getPausedTicks();
 		else
-			return SDL_GetTicks();
+			return SDL_GetTicks()-this->getStartTicks();
 	}
 	
 	return 0;
-}
-
-
-bool Timer::isPaused()
-{
-	return paused;
-}
-
-
-bool Timer::isStarted()
-{
-	return started;
 }

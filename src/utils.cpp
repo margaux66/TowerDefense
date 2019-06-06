@@ -3,20 +3,14 @@
 using namespace std;
 static const int CIRCLE_SUBDIVS = 2<<5;
 
-void drawCircle(int filled) 
-{
-
+void drawCircle(int filled){
     int i = 0;
-
-    if(filled) 
-    {
+    if(filled) {
         glBegin(GL_TRIANGLE_FAN);
         glVertex2f(0.0, 0.0);
     }
-    else 
-    {
+    else {
         glBegin(GL_LINE_STRIP);
-
     }
 
     for(i = 0; i < CIRCLE_SUBDIVS; i++) 
@@ -31,7 +25,6 @@ void drawCircle(int filled)
 }
 
 GLuint loadTexture(SDL_Surface* tex){
-
     GLuint textures;
     glGenTextures(1, &textures);
     
