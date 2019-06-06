@@ -39,28 +39,32 @@ void reshape(SDL_Surface** surface, unsigned int width, unsigned int height){
 }
 
 int main(int argc, char** argv){
+	//vérifie si la map est valide
 	checkMap verif;
 	verif.setPath("./data/map.itd");
 	if(verif.checkedMap()==1){
-		unsigned int tempsDepart = 0;
+		//initialisation de variable
+		unsigned int tempsDepart = 0, tempsPause = 0;
 		bool paused = false;
-		unsigned int tempsPause = 0;
-		int debut =0;
+		int debut =0, accueil = 0, help = 1, help2 =0, loop = 1,premTour =0, secTour=0, troiTour = 0,quatreTour =0, premBuild=0, secBuild = 0, troiBuild=0, avancee_monster=0,count =0, avancee_pause =0;
+		SDL_Rect pos;
+		
+		//initialisation fenêtre
 		if(-1 == SDL_Init(SDL_INIT_VIDEO)){
 			fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme\n");
 			return EXIT_FAILURE;
 		}
 		SDL_Surface* surface;
-		Monster joueur;
-		Wave wave;
-		wave.create_wave();
-		int accueil = 0;
-		int help = 1, help2 =0;
-
 		putenv("SDL_VIDEO_WINDOW_POS=0,0");
 		reshape(&surface, WINDOW_WIDTH, WINDOW_HEIGHT);
 		SDL_WM_SetCaption(WINDOW_TITLE, NULL);
 
+		//création object des différentes classes
+		Monster joueur;
+		Wave wave;
+		wave.create_wave();
+
+		//initialisation textures objets
 		SDL_Rect position;
 		GLuint texture_map = loadTexture(loadImage( IMG_Load("./image/map.ppm")));
 		GLuint map = loadTexture(loadImage(IMG_Load("./image/carte.ppm")));
@@ -69,6 +73,7 @@ int main(int argc, char** argv){
 		GLuint helpText2 = loadTexture(loadImage(IMG_Load("./image/help2.png")));
 		GLuint pauseText = loadTexture(loadImage(IMG_Load("./image/pause.png")));
 
+		//toutes les tours sont dans un tableau
 		vector<Tower*> allTower;
 		Tower t = Tower(1,position,0);
 		GLuint texture_t = loadTexture(loadImage(t.getTTexture()));
@@ -95,21 +100,19 @@ int main(int argc, char** argv){
 		Building b3 = Building(3,position);
 		GLuint texture_b3 = loadTexture(loadImage(b3.getBTexture()));	
 
+		//tableaux pour stocker les textures des monstres
 		vector<GLuint> monstersText;
+		//on récupère les monstres créés par la vague
 		vector<Monster>monsters = wave.getMonsters();
 		for(int i =0; i<monsters.size(); i++){
 			monstersText.push_back(loadTexture(loadImage(monsters[i].getMTexture())));
 		} 
 
-		int loop = 1;
-		int premTour =0, secTour=0, troiTour = 0,quatreTour =0, premBuild=0, secBuild = 0, troiBuild=0;
-
-		int avancee_monster=0;
-		int count =0;
-		SDL_Rect pos;
-		int avancee_pause =0;
+		//boucle de jeu
 		while(loop){
-			SDL_Delay (500);
+			//SDL_Delay (500);
+
+			//affichage des élements et application des textures
 			drawMap(texture_map);
 			drawMap(map);
 
@@ -169,13 +172,15 @@ int main(int argc, char** argv){
 					b.draw_building(texture_b3);
 				glPopMatrix();
 			}
-
+			//affiche la page d'acceuil uniquement si acceuil == 0 donc si la personne n'a pas encore touché un bouton
 			if(accueil == 0){
 				drawMap(accueilText);
 				if(help == 0){
 					drawMap(helpText);
 				}
 			}
+			//si l'utilisateur a déclenché la vague en appuyant sur espace la vague est lancé
+			//pour l'instant la vague n'est constituée que d'un monstre
 			if (debut == 1){
 				for (int i =0; i<monstersText.size();i++){
 					glPushMatrix();
@@ -200,16 +205,20 @@ int main(int argc, char** argv){
 				}
 
 			}
+			//si l'utilisateur appuie sur H l'aide s'affiche
 			if(help2 == 1){
 				drawMap(helpText2);
 			}
+			//si il appuie sur p le jeu se met en pause
 			if(paused == true){
 				drawMap(pauseText);
 			}
 			SDL_GL_SwapBuffers();
 
+			//gestion des évênements
 			SDL_Event e;
 			while(SDL_PollEvent(&e)){
+				//la touche q, esc et la croix permettent de fermer le jeu
 				if(e.type == SDL_QUIT){
 					printf("A bientôt !\n");
 					loop = 0;
@@ -227,6 +236,8 @@ int main(int argc, char** argv){
 					// reshape(&surface, e.resize.w, e.resize.h);
 					// break;
 
+					//délimitation des boutons de l'accueil
+					//change les valeurs des variables en fonction d'où l'utilisateur appuie
 					case SDL_MOUSEBUTTONUP:
 						if(e.button.x<544 && e.button.x>248 ){
 							if(e.button.y<336 && e.button.y>243){
@@ -264,6 +275,9 @@ int main(int argc, char** argv){
 						 	}
 						}
 
+						//Gestion de l'affichage avec les touches
+						//si les différentes variables sont égales à 1 l'élément s'affiche
+						//tour et bâtiments
 						if(e.key.keysym.sym == SDLK_a){
 							switch(premTour){
 								case 1:
@@ -335,6 +349,7 @@ int main(int argc, char** argv){
 									break;
 							}					 		
 						}
+						//donne les info relative à la partie
 						if(e.key.keysym.sym ==SDLK_i){
 							if(tempsDepart != 0){
 								cout << "Temps écoulé : " <<(SDL_GetTicks()-(tempsDepart+tempsPause))/1000<< " en seconde. \n";
@@ -347,6 +362,7 @@ int main(int argc, char** argv){
 							printf("-----------------------------------------\n");
 							break;
 						}	
+						//affiche l'aide dans le terminal est également sur la fenêtre
 						if(e.key.keysym.sym == SDLK_h){
 							printf("--HELP--\n");
 							printf("Appuyez sur la barre espace pour lancer le jeu\n");
@@ -364,12 +380,14 @@ int main(int argc, char** argv){
 							}
 							break;
 						}
+						//donne les informations sur les tours
 						if(e.key.keysym.sym == SDLK_m){
 							for (int i =0; i<allTower.size();i++){
 								allTower[i]->informations();
 							}
 							break;
-						}						
+						}			
+						//lance le jeu			
 						if(e.key.keysym.sym == SDLK_SPACE){
 							if (tempsDepart == 0){
 								debut = 1;
@@ -386,7 +404,7 @@ int main(int argc, char** argv){
 			}
 
 		}
-		
+		//cache les éléments si le joueur a réappuyé sur la touche correspondante
 		if(premTour==0){
 			GLuint texture_t = NULL;
 		}
@@ -408,8 +426,21 @@ int main(int argc, char** argv){
 		if(troiBuild==0){
 			GLuint texture_b3 = NULL;
 		}
-		//SDL_FreeSurface(tow);
-		//SDL_FreeSurface(image);
+
+		// SDL_FreeSurface(&texture_map);
+		// SDL_FreeSurface(&map);
+		// SDL_FreeSurface(&accueilText);
+		// SDL_FreeSurface(&helpText);
+		// SDL_FreeSurface(&helpText2);
+		// SDL_FreeSurface(&pauseText);
+		// SDL_FreeSurface(&t);
+		// SDL_FreeSurface(&t2);
+		// SDL_FreeSurface(&t3);
+		// SDL_FreeSurface(&t4);
+		// SDL_FreeSurface(&b);
+		// SDL_FreeSurface(&b2);
+		// SDL_FreeSurface(&b3);
+
 		SDL_Quit();
 		return EXIT_SUCCESS;
 	}

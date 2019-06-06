@@ -6,33 +6,37 @@
 enum DirectMonster { UP, RIGHT, DOWN, LEFT};
 
 class Monster {
-	//Méthodes
+//Méthodes
 public:
-	Monster();
-	~Monster();
+	Monster();//constructeur
+	~Monster();//destructeur
 
-	void create_monster(int type_monster, int time);
+	void create_monster(int type_monster, int time); //créé un monstre
 
-	void draw_monster(GLuint texture);
+	void draw_monster(GLuint texture); //dessine le monstre
 
-	void update_monster();
+	void update_monster(); //met à jour le monstre en fonction des évênements
 
-	void dead_monster();
+	void dead_monster(); //action si le monstres est mort
 
-	void deplacement(int avancee_monster);
+	void deplacement(int avancee_monster); //déplacement du monstre avec en paramètre la valeur de la boucle
 
+	// Getters//
 	SDL_Rect getFrame();
 	SDL_Rect getPosition();
 	SDL_Surface *getMTexture();
 	int getLife();
-	void setLife(int new_life);
 	int getType();
 	int getVelocity();
 	int getResist();
 	int getMoney();
+
+	//Setters//
 	void setMoney(int new_money);
+	void setLife(int new_life);
 	void setPosition(SDL_Rect newPosition){ position = newPosition;}
-	//Attributs
+	
+//Attributs
 private:
 
 	SDL_Rect current_frame;
